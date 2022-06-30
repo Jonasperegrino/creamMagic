@@ -119,7 +119,7 @@ if st.button("Los"):
         0.3,
         antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float),
     )
-    st.header(f"Thema: {topic_badge}")
+    st.header(f"Thema: {topic_badge.title()}")
     st.header(f"{regional_badge or ''}")
     st.header(
         f"Stärke: {reach_badge or ''} {engagement_badge or ''} {antichurn_badge or ''}"
