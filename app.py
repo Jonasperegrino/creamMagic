@@ -14,7 +14,7 @@ st.set_page_config(
 )
 
 # models
-# topic = load_model("keras/topic", custom_objects=ak.CUSTOM_OBJECTS)
+topic = load_model("keras/topic", custom_objects=ak.CUSTOM_OBJECTS)
 regional = load_model("keras/regional", custom_objects=ak.CUSTOM_OBJECTS)
 # conversion = load_model("keras/topic", custom_objects=ak.CUSTOM_OBJECTS)
 reach = load_model("keras/reach", custom_objects=ak.CUSTOM_OBJECTS)
@@ -36,6 +36,8 @@ def scorer(badge, value):
 # magic
 if st.button("Los"):
     text = np.array([body])
+    # topic_prob = topic.predict(tf.expand_dims(text, -1)) 
+    # topic_badge = topic_prob.argmax(axis=-1)
     regional_badge = scorer(
         "Regionalität", regional.predict(tf.expand_dims(text, -1))[0][0].astype(float)
     )
