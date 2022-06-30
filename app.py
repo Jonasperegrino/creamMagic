@@ -1,9 +1,9 @@
-import streamlit as st
-import tensorflow as tf
 import autokeras as ak
-from tensorflow.keras.models import load_model
 import numpy as np
 import pandas as pd
+import streamlit as st
+import tensorflow as tf
+from tensorflow.keras.models import load_model
 
 st.set_page_config(
     page_title="CREAM Magic",
@@ -23,14 +23,22 @@ antichurn = load_model("keras/antichurn", custom_objects=ak.CUSTOM_OBJECTS)
 
 st.title("🍨 CREAM Magic")
 # title = st.text_input('Title')
-body = st.text_area("Artikeltext",height=500)
+body = st.text_area("Artikeltext", height=500)
 
 # magic
 if st.button("Los"):
     text = np.array([body])
-    st.header(f"Regionalität: {int(round(regional.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%")
-    st.header(f"Reach: {int(round(reach.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%")
-    st.header(f"Engagement: {int(round(engagement.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%")
-    st.header(f"Antichurn: {int(round(antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%")
+    st.header(
+        f"Regionalität: {int(round(regional.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%"
+    )
+    st.header(
+        f"Reach: {int(round(reach.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%"
+    )
+    st.header(
+        f"Engagement: {int(round(engagement.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%"
+    )
+    st.header(
+        f"Antichurn: {int(round(antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%"
+    )
 else:
     st.write("Artikeltext oben einfügen und Los drücken!")
