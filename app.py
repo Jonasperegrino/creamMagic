@@ -36,9 +36,19 @@ def scorer(badge, value):
 # magic
 if st.button("Los"):
     text = np.array([body])
-    regional_badge = scorer("Regionalität",regional.predict(tf.expand_dims(text, -1))[0][0].astype(float))
-    reach_badge = scorer("Reach",reach.predict(tf.expand_dims(text, -1))[0][0].astype(float))
-    engagement_badge = scorer("Engagement",engagement.predict(tf.expand_dims(text, -1))[0][0].astype(float))
-    antichurn_badge = scorer("Anti-Churn",antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float))
-    st.header(f"Klassifizierung: {regional_badge or ''} {reach_badge or ''} {engagement_badge or ''} {antichurn_badge or ''}")
+    regional_badge = scorer(
+        "Regionalität", regional.predict(tf.expand_dims(text, -1))[0][0].astype(float)
+    )
+    reach_badge = scorer(
+        "Reach", reach.predict(tf.expand_dims(text, -1))[0][0].astype(float)
+    )
+    engagement_badge = scorer(
+        "Engagement", engagement.predict(tf.expand_dims(text, -1))[0][0].astype(float)
+    )
+    antichurn_badge = scorer(
+        "Anti-Churn", antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float)
+    )
+    st.header(
+        f"Klassifizierung: {regional_badge or ''} {reach_badge or ''} {engagement_badge or ''} {antichurn_badge or ''}"
+    )
     st.write(f"{body[0:500]}...")
