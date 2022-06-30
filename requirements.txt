@@ -1,5 +1,5 @@
-streamlit
-tensorflow
 autokeras
 numpy 
 pandas
+streamlit
+tensorflow
