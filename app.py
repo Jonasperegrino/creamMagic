@@ -24,7 +24,7 @@ antichurn = load_model("keras/antichurn", custom_objects=ak.CUSTOM_OBJECTS)
 st.title("🍨 CREAM Magic")
 # title = st.text_input('Title')
 body = st.text_area(
-    "Artikeltext", placeholder="Hier Artikeltext einfügen und Los drücken!", height=500
+    "Artikeltext", placeholder="Hier Artikeltext einfügen und Los drücken!", height=300
 )
 
 
