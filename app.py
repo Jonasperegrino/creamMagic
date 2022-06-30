@@ -44,7 +44,7 @@ if st.button("Los"):
         "Regional", 0.7, regional.predict(tf.expand_dims(text, -1))[0][0].astype(float)
     )
     reach_badge = scorer(
-        "Reach", 0.2, reach.predict(tf.expand_dims(text, -1))[0][0].astype(float)
+        "Reach", 0.3, reach.predict(tf.expand_dims(text, -1))[0][0].astype(float)
     )
     engagement_badge = scorer(
         "Engagement",
@@ -57,6 +57,7 @@ if st.button("Los"):
         antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float),
     )
     st.header(
-        f"Klassifizierung: {regional_badge or ''} {reach_badge or ''} {engagement_badge or ''} {antichurn_badge or ''}"
+        f"Klassifizierung: {regional_badge or ''}"
     )
+    st.header(f"Stärke: {reach_badge or ''} {engagement_badge or ''} {antichurn_badge or ''}")
     st.write(f"{body[0:500]}...")
