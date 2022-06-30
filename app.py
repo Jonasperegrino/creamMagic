@@ -14,7 +14,7 @@ st.set_page_config(
 )
 
 # models
-topic = load_model("keras/topic", custom_objects=ak.CUSTOM_OBJECTS)
+# topic = load_model("keras/topic", custom_objects=ak.CUSTOM_OBJECTS)
 regional = load_model("keras/regional", custom_objects=ak.CUSTOM_OBJECTS)
 # conversion = load_model("keras/topic", custom_objects=ak.CUSTOM_OBJECTS)
 reach = load_model("keras/reach", custom_objects=ak.CUSTOM_OBJECTS)
@@ -28,27 +28,33 @@ body = st.text_area(
 )
 
 
-def scorer(badge, value):
-    if value > 0.5:
+def scorer(badge, threshold, value):
+    if value > threshold:
         return badge
+    elif badge == "Regional":
+        return f"Nicht {badge}"
 
 
 # magic
 if st.button("Los"):
     text = np.array([body])
-    # topic_prob = topic.predict(tf.expand_dims(text, -1)) 
+    # topic_prob = topic.predict(tf.expand_dims(text, -1))
     # topic_badge = topic_prob.argmax(axis=-1)
     regional_badge = scorer(
-        "Regionalität", regional.predict(tf.expand_dims(text, -1))[0][0].astype(float)
+        "Regional", 0.7, regional.predict(tf.expand_dims(text, -1))[0][0].astype(float)
     )
     reach_badge = scorer(
-        "Reach", reach.predict(tf.expand_dims(text, -1))[0][0].astype(float)
+        "Reach", 0.2, reach.predict(tf.expand_dims(text, -1))[0][0].astype(float)
     )
     engagement_badge = scorer(
-        "Engagement", engagement.predict(tf.expand_dims(text, -1))[0][0].astype(float)
+        "Engagement",
+        0.3,
+        engagement.predict(tf.expand_dims(text, -1))[0][0].astype(float),
     )
     antichurn_badge = scorer(
-        "Anti-Churn", antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float)
+        "Anti-Churn",
+        0.3,
+        antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float),
     )
     st.header(
         f"Klassifizierung: {regional_badge or ''} {reach_badge or ''} {engagement_badge or ''} {antichurn_badge or ''}"
