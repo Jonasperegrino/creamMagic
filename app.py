@@ -21,8 +21,7 @@ reach = load_model("keras/reach", custom_objects=ak.CUSTOM_OBJECTS)
 engagement = load_model("keras/engagement", custom_objects=ak.CUSTOM_OBJECTS)
 antichurn = load_model("keras/antichurn", custom_objects=ak.CUSTOM_OBJECTS)
 
-pred = topic.predict(tf.expand_dims(text, -1))
-labels = [
+topics = [
     "gesellschaft",
     "gesellschaft/bildung",
     "gesellschaft/familie",
@@ -102,7 +101,7 @@ def scorer(badge, threshold, value):
 if st.button("Los"):
     text = np.array([body])
     topic_prob = topic.predict(tf.expand_dims(text, -1))
-    topic_badge = labels[np.argmax(topic_prob)]
+    topic_badge = topics[np.argmax(topic_prob)]
     
     regional_badge = scorer(
         "Regional", 0.7, regional.predict(tf.expand_dims(text, -1))[0][0].astype(float)
