@@ -14,12 +14,75 @@ st.set_page_config(
 )
 
 # models
-# topic = load_model("keras/topic", custom_objects=ak.CUSTOM_OBJECTS)
+topic = load_model("keras/topic", custom_objects=ak.CUSTOM_OBJECTS)
 regional = load_model("keras/regional", custom_objects=ak.CUSTOM_OBJECTS)
 # conversion = load_model("keras/topic", custom_objects=ak.CUSTOM_OBJECTS)
 reach = load_model("keras/reach", custom_objects=ak.CUSTOM_OBJECTS)
 engagement = load_model("keras/engagement", custom_objects=ak.CUSTOM_OBJECTS)
 antichurn = load_model("keras/antichurn", custom_objects=ak.CUSTOM_OBJECTS)
+
+pred = topic.predict(tf.expand_dims(text, -1))
+labels = [
+    "gesellschaft",
+    "gesellschaft/bildung",
+    "gesellschaft/familie",
+    "gesellschaft/mensch",
+    "gesellschaft/religion",
+    "gesundheit",
+    "gesundheit/krankheit",
+    "heimat",
+    "heimat/bodensee",
+    "heimat/heimatliebe",
+    "heimat/mensch",
+    "heimat/schweiz",
+    "heimat/stadtentwicklung",
+    "heimat/veranstaltung",
+    "heimat/verein",
+    "heimat/wein",
+    "kultur",
+    "kultur/film",
+    "leben",
+    "leben/alltagshilfe",
+    "leben/freizeit",
+    "leben/grundversorgung",
+    "leben/wohnen",
+    "natur",
+    "natur/tiere",
+    "natur/umwelt",
+    "natur/wetter",
+    "politik",
+    "politik/ausland",
+    "politik/bund",
+    "politik/land",
+    "politik/lokal",
+    "politik/lokal/buergermeisterwahl",
+    "sicherheit",
+    "sicherheit/blaulicht",
+    "sicherheit/justiz",
+    "sicherheit/kriminalitaet",
+    "sport",
+    "sport/eishockey",
+    "sport/fussball",
+    "sport/fussball/wuerzburger-kickers",
+    "verkehr",
+    "verkehr/autoverkehr",
+    "verkehr/flugverkehr",
+    "verkehr/oepv",
+    "wirtschaft",
+    "wirtschaft/arbeit",
+    "wirtschaft/branchen",
+    "wirtschaft/branchen/einzelhandel",
+    "wirtschaft/branchen/gastronomie",
+    "wirtschaft/branchen/landwirtschaft",
+    "wirtschaft/branchen/tourismus",
+    "wirtschaft/energie",
+    "wirtschaft/unternehmen",
+    "wirtschaft/verbraucher",
+    "wissen",
+    "wissen/geschichte",
+    "wissen/wissenschaft",
+]
+
 
 st.title("🍨 CREAM Magic")
 # title = st.text_input('Title')
@@ -38,8 +101,9 @@ def scorer(badge, threshold, value):
 # magic
 if st.button("Los"):
     text = np.array([body])
-    # topic_prob = topic.predict(tf.expand_dims(text, -1))
-    # topic_badge = topic_prob.argmax(axis=-1)
+    topic_prob = topic.predict(tf.expand_dims(text, -1))
+    topic_badge = labels[np.argmax(topic_prob)]
+    
     regional_badge = scorer(
         "Regional", 0.7, regional.predict(tf.expand_dims(text, -1))[0][0].astype(float)
     )
@@ -56,6 +120,7 @@ if st.button("Los"):
         0.3,
         antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float),
     )
+    st.header(f"Thema: {topic_badge}")
     st.header(f"{regional_badge or ''}")
     st.header(
         f"Stärke: {reach_badge or ''} {engagement_badge or ''} {antichurn_badge or ''}"
