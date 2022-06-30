@@ -23,22 +23,22 @@ antichurn = load_model("keras/antichurn", custom_objects=ak.CUSTOM_OBJECTS)
 
 st.title("🍨 CREAM Magic")
 # title = st.text_input('Title')
-body = st.text_area("Artikeltext",placeholder="Hier Artikeltext einfügen und Los drücken!", height=500)
+body = st.text_area(
+    "Artikeltext", placeholder="Hier Artikeltext einfügen und Los drücken!", height=500
+)
+
+
+def scorer(badge, value):
+    if value > 0.5:
+        return badge
+
 
 # magic
 if st.button("Los"):
     text = np.array([body])
-    st.write(f"Artikeltext: {body[0:500]}...")
-    st.header("Klassifizierung")
-    st.write(
-        f"Regionalität: {int(round(regional.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%"
-    )
-    st.write(
-        f"Reach: {int(round(reach.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%"
-    )
-    st.write(
-        f"Engagement: {int(round(engagement.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%"
-    )
-    st.write(
-        f"Antichurn: {int(round(antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float),2)*100)}%"
-    )
+    regional_badge = scorer("Regionalität",regional.predict(tf.expand_dims(text, -1))[0][0].astype(float))
+    reach_badge = scorer("Reach",reach.predict(tf.expand_dims(text, -1))[0][0].astype(float))
+    engagement_badge = scorer("Engagement",engagement.predict(tf.expand_dims(text, -1))[0][0].astype(float))
+    antichurn_badge = scorer("Anti-Churn",antichurn.predict(tf.expand_dims(text, -1))[0][0].astype(float))
+    st.header(f"Klassifizierung: {regional_badge or ''} {reach_badge or ''} {engagement_badge or ''} {antichurn_badge or ''}")
+    st.write(f"{body[0:500]}...")
