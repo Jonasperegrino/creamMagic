@@ -1,6 +1,5 @@
 import autokeras as ak
 import numpy as np
-import pandas as pd
 import streamlit as st
 import tensorflow as tf
 from tensorflow.keras.models import load_model
